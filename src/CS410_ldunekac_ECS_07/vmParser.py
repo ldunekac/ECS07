@@ -53,14 +53,15 @@ class VMParser():
     def evalPush(self, argList):
         if argList[1] == 'CONSTANT':
             self.file.write("@" + argList[2] +"\nD=A\n@SP\nM=M+1\nA=M-1\nM=D\n")
-        elif argList[1] == 'POINTER':
+        elif argList[1] == 'POINTER' or argList[1] == 'TEMP':
             self.file.write("@" + argList[2] +"\nD=A\n@"+ memoryMap[argList[1]]+"\nA=D+A\nD=M\n@SP\nM=M+1\nA=M-1\nM=D\n")            
         else:
             self.file.write("@" + argList[2] +"\nD=A\n@"+ memoryMap[argList[1]]+"\nA=D+M\nD=M\n@SP\nM=M+1\nA=M-1\nM=D\n")
 
     def evalPop(self, argList):
-        if argList[1] == 'POINTER':
-             self.file.write("@" + argList[2] +"\nD=A\n@"+ memoryMap[argList[1]]+"\nD=A+D\n@R15\nM=D\n@SP\nM=M-1\nA=M\nD=M\n@R15\nA=M\nM=D\n") 
+        if argList[1] == 'POINTER' or argList[1] == 'TEMP':
+            print argList[1]
+            self.file.write("@" + argList[2] +"\nD=A\n@"+ memoryMap[argList[1]]+"\nD=A+D\n@R15\nM=D\n@SP\nM=M-1\nA=M\nD=M\n@R15\nA=M\nM=D\n") 
         else:
             self.file.write("@" + argList[2] +"\nD=A\n@"+ memoryMap[argList[1]]+"\nD=M+D\n@R15\nM=D\n@SP\nM=M-1\nA=M\nD=M\n@R15\nA=M\nM=D\n") 
 
